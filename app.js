@@ -27,7 +27,12 @@ const questions = [
         prompt: "A very useful tool used during development and debugging for printing content to the debugger is:",
         options: ["JavaScript", "Terrminal/Bash", "For Loops", "Console.log"],
         answer: "Console.log"
-    }
-    ];
+    }];
+    const questionSection = document.querySelector('#questions')
+    const timerSection = document.querySelector('#timer')
+    const startButton = document.querySelector('#start')
 
-    console.log(questions)
+    function gameBegins(){
+    }
+
+    startButton.onclick = gameBegins;
