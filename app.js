@@ -32,7 +32,21 @@ const questions = [
     const timerSection = document.querySelector('#timer')
     const startButton = document.querySelector('#start')
 
-    function gameBegins(){
-    }
+    const firstQuestion = 0;
+    const time = questions.length - 15
 
-    startButton.onclick = gameBegins;
+    let count = 75;
+    const timerEl = setInterval (function(){
+        count--;
+        console.log(count);
+        if (count === 0){
+            clearInterval(timer);
+            console.log("Time's up!");}
+    }, 1000);
+
+    const quizBegins(){
+        const landingPage = document.querySelector('#landing-page');
+        landingPage.setAttribute("hide")
+    }
+    
+    startButton.onclick = quizBegins;
