@@ -29,24 +29,42 @@ const questions = [
         answer: "Console.log"
     }];
     const questionSection = document.querySelector('#questions')
-    const timerSection = document.querySelector('#timer')
+    const timerEl= document.querySelector('#timer')
     const startButton = document.querySelector('#start')
+    const choiceEl = document.querySelector("#choices");
 
-    const firstQuestion = 0;
-    const time = questions.length - 15
+    let firstQuestion = 0;
+    const time = questions.length - 10
 
-    let count = 75;
-    const timerEl = setInterval (function(){
-        count--;
-        console.log(count);
-        if (count === 0){
-            clearInterval(timer);
-            console.log("Time's up!");}
-    }, 1000);
-
-    const quizBegins(){
-        const landingPage = document.querySelector('#landing-page');
-        landingPage.setAttribute("hide")
+    let timerId;
+    function quizBegins() {
+        timerId = setInterval(clockTick, 1000);
+        timerEl.textContent = time;
+        const landingPage = document.querySelector("#landing-page");
+        landingScreenEl.setAttribute("end", "class");
+        questionsEl.removeAttribute("class");
+        getQuestion();
     }
-    
+
+    function clockTick() {
+        time--;
+        timerEl.textContent = time;
+         if (time <= 0) {
+            quizEnds()}
+    }
+        
+
+    function getQuestion() {
+        let currentQuestion = questions[firstQuestion];
+      let promptEl = document.querySelector("#prompt-questions")
+        promptEl.textContent = currentQuestion.prompt;
+        choiceEl.setHTML() = "";
+        currentQuestion.options.forEach(function(choice, i) {
+            let choicesBtn = document.createElement("button");
+            choicesBtn.setAttribute("value", choice);
+            choicesBtn.textContent = i + 1 + ". " + choice;
+            choicesBtn.onclick = questionClick;
+            choicesEl.appendChild(choiceBtn);
+        });
+    }
     startButton.onclick = quizBegins;
