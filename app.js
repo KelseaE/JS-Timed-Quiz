@@ -1,3 +1,12 @@
+let questionSection = document.querySelector('#questions')
+let timerEl= document.querySelector('#timer')
+let startButton = document.querySelector('#start')
+let choiceEl = document.querySelector("#choices")
+let feedbackEl = document.querySelector("#feedback")
+let nameEl = document.querySelector("#name")
+let submitButton = document.querySelector("#submit")
+// let repeatButtonn = document.querySelector("#repeat")
+document.addEventListener('DOMContentLoaded', function() {
 const questions = [
     {
         prompt: "Commonly used data types DO NOT include:",
@@ -28,43 +37,97 @@ const questions = [
         options: ["JavaScript", "Terrminal/Bash", "For Loops", "Console.log"],
         answer: "Console.log"
     }];
-    const questionSection = document.querySelector('#questions')
-    const timerEl= document.querySelector('#timer')
-    const startButton = document.querySelector('#start')
-    const choiceEl = document.querySelector("#choices");
-
-    let firstQuestion = 0;
-    const time = questions.length - 10
+    let questionIndex = 0;
+    let time = questions.length * 15
 
     let timerId;
+    
     function quizBegins() {
         timerId = setInterval(clockTick, 1000);
         timerEl.textContent = time;
-        const landingPage = document.querySelector("#landing-page");
-        landingScreenEl.setAttribute("end", "class");
-        questionsEl.removeAttribute("class");
+        let landingPage = document.querySelector("#landing-page");
+        landingPage.classList.add("end");
+        questionSection.classList.remove("class")
         getQuestion();
     }
 
-    function clockTick() {
-        time--;
-        timerEl.textContent = time;
-         if (time <= 0) {
-            quizEnds()}
-    }
         
 
     function getQuestion() {
-        let currentQuestion = questions[firstQuestion];
+        let currentQuestion = questions[questionIndex];
       let promptEl = document.querySelector("#prompt-questions")
         promptEl.textContent = currentQuestion.prompt;
-        choiceEl.setHTML() = "";
+        choiceEl.innerHTML = "";
+
         currentQuestion.options.forEach(function(choice, i) {
             let choicesBtn = document.createElement("button");
             choicesBtn.setAttribute("value", choice);
             choicesBtn.textContent = i + 1 + ". " + choice;
             choicesBtn.onclick = questionClick;
-            choicesEl.appendChild(choiceBtn);
+            choiceEl.appendChild(choicesBtn);
         });
+        if (questionIndex === questions.length - 1) {
+            quizEnds()
+        }
     }
+
+
+    function questionClick() {
+        if (this.value !== questions[questionIndex].answer) {
+          time -= 10;
+          if (time < 0) {
+            time = 0;
+          }
+          timerEl.textContent = time;
+          feedbackEl.textContent = `Incorrect! The correct answer was ${questions[questionIndex].answer}.`;} 
+          else {
+          feedbackEl.textContent = "Correct!";
+        }
+        feedbackEl.setAttribute("class", "feedback");
+        setTimeout(function() {
+          feedbackEl.setAttribute("class", "feedback-hide");
+        }, 2000);
+        questionIndex++;
+        if (questionIndex === questions.length) {
+          quizEnd();} 
+          else {
+          getQuestion();}
+    }
+
+    function quizEnds() {
+        clearInterval(timerId);
+        let endScreenEl = document.querySelector("#quiz-ends");
+        endScreenEl.removeAttribute("class");
+        let finalEl = document.querySelector("#final");
+        finalEl.textContent = time;
+        questionSection.setAttribute("class", "hide");
+    }
+     function clockTick() {
+        time--;
+        timerEl.textContent = time;
+         if (time <= 0) {
+            quizEnds()}
+    }
+    function highScore() {
+        let name = nameEl.value.trim();
+        if (name !== "") {
+          let highscores =
+            JSON.parse(window.localStorage.getItem("highscores")) || [];
+          let newScore = {
+            score: time,
+            name: name
+          };
+          highscores.push(newScore);
+          window.localStorage.setItem("highscores",JSON.stringify(highscores));
+        }
+    }
+
+    function checkForEnter(event) {
+        if (event.key === "Enter") {
+            highScore();
+        }
+    }
+    nameEl.onkeyup = checkForEnter;
     startButton.onclick = quizBegins;
+    submitButton.onclick = highScore;
+});

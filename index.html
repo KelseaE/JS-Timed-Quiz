@@ -11,22 +11,43 @@
     <body>
         <header>
             <div class="timer">
-                <p>Time:</p>
+                <p>Time:<span id="timer"></span></p>
+            </div>
+            <div>
+                <a href="end.html"><button class="scores-header" id="view-high-scores">View High Scores</button></a>
             </div>
         </header>
+
         <main class="quiz">
-            <div>
-                <div id="landing-page">
+
+            <div class="body">
+                <div class="startpage" id="landing-page">
                     <h1>Coding Quiz Challenge</h1>
                     <p>Try to answer the following code-based questions. Each incorrect answer will cost you time! Choose wisely!</p>
                     <button id="start">Start Quiz</button>
                 </div>
             </div>
+
             <div id="questions" class ="end">
-                <h3 id="prompt-questions"> </h3>
-                <div id="choices"></div>
+                <h2 id="prompt-questions"> </h2>
+                <div class="choices" id="choices"></div>
             </div>
+
+            <div class="end" id="quiz-ends">
+                <h2>Quiz Completed!</h2>
+                <p>Your score is: <span id="final"></span></p>
+                <p>Please enter your name: <input type="text" id="name" max="3" />
+                    <button id="submit">Submit</button>
+                </p>
+            </div>
+
+            <div id="feedback" class="feedback-hide"></div>
+
         </main>
+
         <script src="app.js"></script>
+        <script src="finalscore.js"></script>
+
     </body>
+
 </html>
