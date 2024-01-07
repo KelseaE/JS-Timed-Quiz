@@ -4,8 +4,8 @@ let startButton = document.querySelector('#start')
 let choiceEl = document.querySelector("#choices")
 let feedbackEl = document.querySelector("#feedback")
 let nameEl = document.querySelector("#name")
-let submitButton = document.querySelector("#submit")
-// let repeatButtonn = document.querySelector("#repeat")
+let submitButton = document.querySelector("#submit");
+
 document.addEventListener('DOMContentLoaded', function() {
 const questions = [
     {
@@ -46,8 +46,8 @@ const questions = [
         timerId = setInterval(clockTick, 1000);
         timerEl.textContent = time;
         let landingPage = document.querySelector("#landing-page");
-        landingPage.classList.add("end");
-        questionSection.classList.remove("class")
+        landingPage.classList.add("hide");
+        questionSection.classList.remove("hide")
         getQuestion();
     }
 
@@ -66,8 +66,13 @@ const questions = [
             choicesBtn.onclick = questionClick;
             choiceEl.appendChild(choicesBtn);
         });
+
+        if (questionIndex === questions.length - 1){
+            startButton.textContent = "Submit";
+        }
+
         if (questionIndex === questions.length - 1) {
-            quizEnds()
+            quizCompleted();
         }
     }
 
@@ -89,26 +94,33 @@ const questions = [
         }, 2000);
         questionIndex++;
         if (questionIndex === questions.length) {
-          quizEnd();} 
+          quizCompleted();} 
           else {
           getQuestion();}
     }
 
-    function quizEnds() {
+    function quizCompleted() {
         clearInterval(timerId);
-        let endScreenEl = document.querySelector("#quiz-ends");
-        endScreenEl.removeAttribute("class");
-        let finalEl = document.querySelector("#final");
-        finalEl.textContent = time;
-        questionSection.setAttribute("class", "hide");
+        questionSection.classList.add("hide");
+        let quizEndEl = document.querySelector("#quiz-ends");
+        quizEndEl.classList.remove("hide");
+        submitButton.classList.remove("hide");
+        nameEl.classList.remove ("hide");
+        let finalEl = document.querySelector("#final-score")
+        finalEl.textContent = "Your score is: " + time;
+        highScore(event);
     }
+
      function clockTick() {
         time--;
         timerEl.textContent = time;
-         if (time <= 0) {
-            quizEnds()}
+         if(time <= 0) {
+            quizCompleted()}
     }
-    function highScore() {
+
+    function highScore(event) {
+        event.preventDefault();
+
         let name = nameEl.value.trim();
         if (name !== "") {
           let highscores =
@@ -129,5 +141,6 @@ const questions = [
     }
     nameEl.onkeyup = checkForEnter;
     startButton.onclick = quizBegins;
-    submitButton.onclick = highScore;
+    submitButton.addEventListener("click", function(event){
+    highScore(event)})
 });
