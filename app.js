@@ -98,19 +98,6 @@ const questions = [
           else {
           getQuestion();}
     }
-
-    function quizCompleted() {
-        clearInterval(timerId);
-        questionSection.classList.add("hide");
-        let quizEndEl = document.querySelector("#quiz-ends");
-        quizEndEl.classList.remove("hide");
-        submitButton.classList.remove("hide");
-        nameEl.classList.remove ("hide");
-        let finalEl = document.querySelector("#final-score")
-        finalEl.textContent = "Your score is: " + time;
-        highScore(event);
-    }
-
      function clockTick() {
         time--;
         timerEl.textContent = time;
@@ -118,29 +105,33 @@ const questions = [
             quizCompleted()}
     }
 
-    function highScore(event) {
-        event.preventDefault();
-
+    function quizCompleted() {
+        clearInterval(timerId);
+        questionSection.classList.add("hide");
+        let quizEndEl = document.querySelector("#quiz-ends");
+        quizEndEl.classList.remove("hide");
+        // submitButton.classList.remove("hide");
+        nameEl.classList.remove("hide");
+        let finalEl = document.querySelector("#final-score");
+        finalEl.textContent = "Your score is: " + time;
+      
         let name = nameEl.value.trim();
-        if (name !== "") {
-          let highscores =
-            JSON.parse(window.localStorage.getItem("highscores")) || [];
-          let newScore = {
-            score: time,
-            name: name
-          };
-          highscores.push(newScore);
-          window.localStorage.setItem("highscores",JSON.stringify(highscores));
-        }
+        let highscores = JSON.parse(window.localStorage.getItem("highscores")) || [];
+        let newScore = {
+          score: time,
+          name: name
+        };
+        highscores.push(newScore);
+        window.localStorage.setItem("highscores", JSON.stringify(highscores));
     }
-
+      
     function checkForEnter(event) {
         if (event.key === "Enter") {
-            highScore();
+            highScore(event);
         }
     }
-    nameEl.onkeyup = checkForEnter;
+    nameEl.onkeyup = function(event){
+        checkForEnter(event)};
     startButton.onclick = quizBegins;
-    submitButton.addEventListener("click", function(event){
-    highScore(event)})
+    // submitButton.onclick = quizCompleted
 });
